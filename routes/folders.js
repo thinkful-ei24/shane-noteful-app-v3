@@ -72,9 +72,6 @@ router.post('/', (req, res, next) => {
         .json(result);
     })
     .catch(err => {
-      next(err);
-    })
-    .catch(err => {
       if (err.code === 11000) {
         err = new Error('The folder name already exists');
         err.status = 400;
@@ -115,6 +112,10 @@ router.put('/:id', (req, res, next) => {
       }
     })
     .catch(err => {
+      if (err.code === 11000) {
+        err = new Error('The folder name already exists');
+        err.status = 400;
+      }
       next(err);
     });
 });
@@ -134,7 +135,7 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Folder.findByIdAndRemove(id)
+  Folder.findByIdAndRemove(id, {$unset: { name: '' }})
     .then(() => {
       res.status(204).end();
     })

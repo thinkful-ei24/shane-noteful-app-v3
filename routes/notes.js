@@ -9,7 +9,7 @@ const router = express.Router();
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  const { searchTerm } = req.query;
+  const { searchTerm, folderId } = req.query;
 
   let filter = {};
 
@@ -19,6 +19,10 @@ router.get('/', (req, res, next) => {
     // Mini-Challenge: Search both `title` and `content`
     // const re = new RegExp(searchTerm, 'i');
     // filter.$or = [{ 'title': re }, { 'content': re }];
+  }
+
+  if (folderId) {
+    filter.folderId = folderId;
   }
 
   Note.find(filter)
