@@ -56,7 +56,7 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { title, content } = req.body;
+  const { title, content, folderId } = req.body;
 
   /***** Never trust users - validate input *****/
   if (!title) {
@@ -65,7 +65,7 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  const newNote = { title, content };
+  const newNote = { title, content, folderId };
 
   Note.create(newNote)
     .then(result => {
@@ -81,7 +81,7 @@ router.post('/', (req, res, next) => {
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
-  const { title, content } = req.body;
+  const { title, content, folderId } = req.body;
 
   /***** Never trust users - validate input *****/
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -96,7 +96,7 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  const updateNote = { title, content };
+  const updateNote = { title, content, folderId };
 
   Note.findByIdAndUpdate(id, updateNote, { new: true })
     .then(result => {

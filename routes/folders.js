@@ -18,9 +18,8 @@ router.get('/', (req, res, next) => {
   }
 
   Folder.find(filter)
-    .sort({ updatedAt: 'desc' })
+    .sort({ name: 'Asc' })
     .then(results => {
-
       res.json(results);
     })
     .catch(err => {
@@ -73,6 +72,13 @@ router.post('/', (req, res, next) => {
         .json(result);
     })
     .catch(err => {
+      next(err);
+    })
+    .catch(err => {
+      if (err.code === 11000) {
+        err = new Error('The folder name already exists');
+        err.status = 400;
+      }
       next(err);
     });
 });
