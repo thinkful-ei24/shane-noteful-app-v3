@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const app = require('../server');
 const { TEST_MONGODB_URI } = require('../config');
 
-const Note = require('../models/note.model');
+const Note = require('../models/note.js');
 
 const { notes } = require('../db/seed/notes');
 
