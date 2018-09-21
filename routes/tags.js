@@ -1,22 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const Folder = require('../models/folder');
+const Tag = require('../models/tags');
 
-const router = express.Router();
+const router = express.router();
 
 
 // GET
-
 router.get('/', (req, res, next) => {
   const { searchTerm } = req.query;
-  console.log('1');
+
   let filter = {};
 
-  if (searchTerm) {
+  if(searchTerm) {
     filter.name = { $regex: searchTerm, $options: 'i' };
   }
-  Folder.find(filter)
+
+  Tag.find(filter)
     .sort({ name: 'Asc' })
     .then(results => {
       res.json(results);
@@ -26,22 +26,21 @@ router.get('/', (req, res, next) => {
     });
 });
 
-/* ========== GET/READ A SINGLE ITEM ========== */
+// GET by ID
+
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+  if(!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Folder.findById(id)
+  Tag.findById(id)
     .then(result => {
-      if (result) {
+      if(result) {
         res.json(result);
-      } else {
-        next();
       }
     })
     .catch(err => {
@@ -51,27 +50,26 @@ router.get('/:id', (req, res, next) => {
 
 
 // POST
-/* ========== POST/CREATE AN ITEM ========== */
-router.post('/', (req, res, next) => {
+router.post('/api/tags', (req, res, next) => {
   const { name } = req.body;
+  const newTag = {
+    name: "test tag",
+  };
 
-  /***** Never trust users - validate input *****/
-  if (!name) {
+  if(!name) {
     const err = new Error('Missing `name` in request body');
     err.status = 400;
     return next(err);
   }
 
-  const newFolder = { name };
-
-  Folder.create(newFolder)
+  Tag.create(newTag)
     .then(result => {
       res.location(`${req.originalUrl}/${result.id}`)
         .status(201)
         .json(result);
     })
     .catch(err => {
-      if (err.code === 11000) {
+      if(err.code === 11000) {
         err = new Error('The folder name already exists');
         err.status = 400;
       }
@@ -79,75 +77,56 @@ router.post('/', (req, res, next) => {
     });
 });
 
-
 // PUT
-
-/* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
 
-  /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    const err = new Error('The `id` is not valid');
+  const updateFolder = { name };
+
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('The `id` is invalid');
     err.status = 400;
     return next(err);
   }
 
-  if (!name) {
+  if(!name) {
     const err = new Error('Missing `name` in request body');
     err.status = 400;
     return next(err);
   }
 
-  const updateFolder = { name };
-
-  Folder.findByIdAndUpdate(id, updateFolder, { new: true })
+  Tag.findByIdAndUpdate(id, updateFolder, { new: true })
     .then(result => {
-      if (result) {
+      if(result) {
         res.json(result);
-      } else {
-        next();
       }
     })
     .catch(err => {
-      if (err.code === 11000) {
-        err = new Error('The folder name already exists');
+      if(err.code === 11000){
+        const err = new Error('The tag `name` already exists');
         err.status = 400;
       }
       next(err);
     });
 });
 
-
 // DELETE
 
-
-/* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
 
-  /***** Never trust users - validate input *****/
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    const err = new Error('The `id` is not valid');
+  if(!mongoose.Types.ObjectId.isValid(id)) {
+    const err = new Error('the `id` is not valid');
     err.status = 400;
     return next(err);
   }
 
-  Folder.findByIdAndRemove(id, {$unset: { name: '' }})
-    .then(() => {
+  Tag.findByIdAndRemove(id, { $unset: { name: '' }})
+    .then(result => {
       res.status(204).end();
     })
     .catch(err => {
       next(err);
     });
 });
-
-
-
-
-
-
-
-
-module.exports = router;
