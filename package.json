@@ -9,7 +9,7 @@
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js",
-		"test": "nyc --reporter=lcov --reporter=text-summary cross-env NODE_ENV=test mocha --timeout 5000",
+		"test": "nyc --reporter=lcov --reporter=text-summary cross-env NODE_ENV=test mocha --timeout 10000",
 		"seed": "node ./utils/seed-database.js",
 		"cover": "nyc --reporter=lcov --reporter=text-summary npm test"
 	},

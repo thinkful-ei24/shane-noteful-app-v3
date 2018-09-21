@@ -41,6 +41,8 @@ router.get('/:id', (req, res, next) => {
     .then(result => {
       if(result) {
         res.json(result);
+      } else {
+        next();
       }
     })
     .catch(err => {
@@ -50,7 +52,7 @@ router.get('/:id', (req, res, next) => {
 
 
 // POST
-router.post('/api/tags', (req, res, next) => {
+router.post('/', (req, res, next) => {
   const { name } = req.body;
   const newTag = {
     name: "test tag",
@@ -70,7 +72,7 @@ router.post('/api/tags', (req, res, next) => {
     })
     .catch(err => {
       if(err.code === 11000) {
-        err = new Error('The folder name already exists');
+        err = new Error('The tag name already exists');
         err.status = 400;
       }
       next(err);
@@ -85,7 +87,7 @@ router.put('/:id', (req, res, next) => {
   const updateFolder = { name };
 
   if(!mongoose.Types.ObjectId.isValid(id)) {
-    const err = new Error('The `id` is invalid');
+    const err = new Error('The `id` is not valid');
     err.status = 400;
     return next(err);
   }
@@ -100,11 +102,13 @@ router.put('/:id', (req, res, next) => {
     .then(result => {
       if(result) {
         res.json(result);
+      } else {
+        next();
       }
     })
     .catch(err => {
       if(err.code === 11000){
-        const err = new Error('The tag `name` already exists');
+        const err = new Error('The tag name already exists');
         err.status = 400;
       }
       next(err);
@@ -123,12 +127,13 @@ router.delete('/:id', (req, res, next) => {
   }
 
   Tag.findByIdAndRemove(id, { $unset: { name: '' }})
-    .then(result => {
+    .then(() => {
       res.status(204).end();
     })
     .catch(err => {
       next(err);
     });
 });
+
 
 module.exports = router;

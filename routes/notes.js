@@ -9,7 +9,7 @@ const router = express.Router();
 
 /* ========== GET/READ ALL ITEMS ========== */
 router.get('/', (req, res, next) => {
-  const { searchTerm, folderId, tagId } = req.query;
+  const { searchTerm, folderId  } = req.query;
 
   let filter = {};
 
@@ -20,12 +20,10 @@ router.get('/', (req, res, next) => {
   if (folderId) {
     filter.folderId = folderId;
   }
-  if(tagId) {
-    filter.tagId = tagId;
-  }
+
 
   Note.find(filter)
-    .populate('tagId')
+
     .sort({ updatedAt: 'desc' })
     .then(results => {
       res.json(results);
@@ -46,7 +44,6 @@ router.get('/:id', (req, res, next) => {
   }
 
   Note.findById(id)
-    .populate('tagId')
     .then(result => {
       if (result) {
         res.json(result);
@@ -61,7 +58,7 @@ router.get('/:id', (req, res, next) => {
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-  const { title, content, folderId, tagId } = req.body;
+  const { title, content, folderId, tags } = req.body;
 
   /***** Never trust users - validate input *****/
   if (!title) {
@@ -69,13 +66,8 @@ router.post('/', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-  if(!mongoose.Types.ObjectId.isValid(tagId)) {
-    const err = new Error('The `tagId` is not valid');
-    err.status = 400;
-    return next(err);
-  }
 
-  const newNote = { title, content, folderId, tagId };
+  const newNote = { title, content, folderId, tags };
 
   Note.create(newNote)
     .then(result => {
@@ -91,17 +83,11 @@ router.post('/', (req, res, next) => {
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
-  const { title, content, folderId, tagId } = req.body;
+  const { title, content, folderId, tags } = req.body;
 
   /***** Never trust users - validate input *****/
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
-    err.status = 400;
-    return next(err);
-  }
-
-  if(!mongoose.Types.ObjectId.isValid(tagId)) {
-    const err = new Error('The `tagId` is not valid');
     err.status = 400;
     return next(err);
   }
@@ -112,7 +98,7 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  const updateNote = { title, content, folderId, tagId };
+  const updateNote = { title, content, folderId, tags };
 
   Note.findByIdAndUpdate(id, updateNote, { new: true })
     .then(result => {

@@ -71,7 +71,7 @@ describe('Noteful API - Tags', function () {
     });
 
     it('should return correct search results for a searchTerm query', function () {
-      const searchTerm = 'archive';
+      const searchTerm = 'breed';
       // const re = new RegExp(searchTerm, 'i');
       const dbPromise = Tag.find({
         name: { $regex: searchTerm, $options: 'i' }
@@ -287,7 +287,7 @@ describe('Noteful API - Tags', function () {
       return Tag.findOne()
         .then(_data => {
           data = _data;
-          return chai.request(app).delete(`/api/folders/${data.id}`);
+          return chai.request(app).delete(`/api/tags/${data.id}`);
         })
         .then(function (res) {
           expect(res).to.have.status(204);
