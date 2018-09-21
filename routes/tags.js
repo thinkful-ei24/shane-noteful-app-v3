@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const Tag = require('../models/tags');
 
-const router = express.router();
+const router = express.Router();
 
 
 // GET
@@ -130,3 +130,5 @@ router.delete('/:id', (req, res, next) => {
       next(err);
     });
 });
+
+module.exports = router;
