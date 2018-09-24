@@ -7,19 +7,21 @@ const router = express.Router();
 
 router.post('/', (req, res, next) => {
   const { username, password, fullName } = req.body;
-  const newUser = {
-    username: "username",
-    password: "password",
-    fullName: "Joe Smith"
-  };
+  const newUser = { username, password, fullName}
 
-  if(!name) {
+
+  if(!username) {
     const err = new Error('Missing `username` in request body');
     err.status = 400;
     return next(err);
-  }
+  };
+  if(!password) {
+    const err = new Error('Missing `password` in request body');
+    err.status = 400;
+    return next(err);
+  };
 
-  Tag.create(newTag)
+  User.create(newUser)
     .then(result => {
       res.location(`${req.originalUrl}/${result.id}`)
         .status(201)
