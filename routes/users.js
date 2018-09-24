@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const User = require('../models/users');
 
@@ -20,8 +21,15 @@ router.post('/', (req, res, next) => {
     err.status = 400;
     return next(err);
   };
-
-  User.create(newUser)
+  return User.hashPassword(password)
+    .then(digest => {
+      const newUser = {
+        username,
+        password: digest,
+        fullName
+      };
+      return User.create(newUser);
+    })
     .then(result => {
       res.location(`${req.originalUrl}/${result.id}`)
         .status(201)
