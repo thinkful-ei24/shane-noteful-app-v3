@@ -102,6 +102,4 @@ router.post('/', ( req, res, next) => {
     });
 });
 
-router.use('/', passport.authenticate('jwt', { session: flase, failWithError: true }));
-
 module.exports = router;

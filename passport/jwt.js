@@ -1,4 +1,4 @@
-const { Strategy: JwtStrategy, ExtractJwt } = requir('passport-jwt');
+const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 
 const { JWT_SECRET } = require('../config');
 
