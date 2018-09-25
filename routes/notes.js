@@ -2,7 +2,7 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-
+const passport = require('passport');
 const Note = require('../models/note');
 
 const router = express.Router();
@@ -132,5 +132,7 @@ router.delete('/:id', (req, res, next) => {
       next(err);
     });
 });
+
+router.use('/', passport.authenticate('jwt', { session: flase, failWithError: true }));
 
 module.exports = router;
