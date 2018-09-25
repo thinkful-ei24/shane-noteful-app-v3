@@ -1,10 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
+const passport = require('passport');
 const Tag = require('../models/tags');
 
 const router = express.Router();
 
+router.use('/', passport.authenticate('jwt', { session: false, failWithError: true }));
 
 // GET
 router.get('/', (req, res, next) => {
@@ -134,6 +135,5 @@ router.delete('/:id', (req, res, next) => {
       next(err);
     });
 });
-
 
 module.exports = router;

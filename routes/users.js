@@ -1,12 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 const User = require('../models/users');
 
 const router = express.Router();
 
-router.post('/', (req, res, next) => {
+router.post('/', ( req, res, next) => {
   const { username, password, fullName } = req.body;
   const newUser = { username, password, fullName}
 
