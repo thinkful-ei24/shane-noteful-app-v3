@@ -3,13 +3,13 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true},
   fullName: { type: String }
 });
 
-userSchema.set('toObject', {
+schema.set('toObject', {
   virtuals: true,     // include built-in virtual `id`
   versionKey: false,  // remove `__v` version key
   transform: (doc, result) => {
@@ -19,12 +19,12 @@ userSchema.set('toObject', {
   }
 });
 
-userSchema.methods.validatePassword = function (password) {
+schema.methods.validatePassword = function (password) {
   return bcrypt.compare(password, this.password);
 };
 
-userSchema.statics.hashPassword = function(password) {
+schema.statics.hashPassword = function(password) {
   return bcrypt.hash(password, 10);
 }
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', schema);

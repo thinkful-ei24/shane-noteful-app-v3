@@ -6,10 +6,11 @@ const { MONGODB_URI } = require('../config');
 const Note = require('../models/note');
 const Folder = require('../models/folder');
 const Tag = require('../models/tags');
+const User = require('../models/users');
 
-const { notes } = require('../db/seed/notes');
-const { folders } = require('../db/seed/folders');
-const { tags } = require('../db/seed/tags');
+const { users, notes, folders, tags } = require('../db/seed/data');
+// const { folders } = require('../db/seed/folders');
+// const { tags } = require('../db/seed/tags');
 
 console.info('Connecting to:', MONGODB_URI);
 mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
@@ -20,6 +21,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
   .then(() => {
     console.info('Seeding Database');
     return Promise.all([
+      User.insertMany(users),
       Note.insertMany(notes),
       Folder.insertMany(folders),
       Tag.insertMany(tags),

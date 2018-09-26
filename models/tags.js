@@ -1,13 +1,17 @@
 
 const mongoose = require('mongoose');
 
-const tagSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true }
+const schema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
-tagSchema.set('timestamps', true);
+schema.index({ name: 1, userId: 1 },{ unique: true });
 
-tagSchema.set('toObject', {
+
+schema.set('timestamps', true);
+
+schema.set('toObject', {
   virtuals: true,
   transform: (doc, result) => {
     delete result._id;
@@ -15,4 +19,4 @@ tagSchema.set('toObject', {
   }
 });
 
-module.exports = mongoose.model('Tag', tagSchema);
+module.exports = mongoose.model('Tag', schema);

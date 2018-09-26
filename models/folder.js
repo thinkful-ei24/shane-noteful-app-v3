@@ -2,13 +2,16 @@
 
 const mongoose = require('mongoose');
 
-const folderSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true}
+const schema = new mongoose.Schema({
+  name: { type: String, required: true, /*unique: true*/},
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
-folderSchema.set('timestamps', true);
+schema.index({ name: 1, userId: 1 },{ unique: true });
 
-folderSchema.set('toObject', {
+schema.set('timestamps', true);
+
+schema.set('toObject', {
   virtuals: true,
   transform: (doc, result) => {
     delete result._id;
@@ -16,4 +19,4 @@ folderSchema.set('toObject', {
   }
 });
 
-module.exports = mongoose.model('Folder', folderSchema);
+module.exports = mongoose.model('Folder', schema);
