@@ -21,10 +21,10 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser:true })
   .then(() => {
     console.info('Seeding Database');
     return Promise.all([
-      User.insertMany(users),
       Note.insertMany(notes),
       Folder.insertMany(folders),
       Tag.insertMany(tags),
+      User.insertMany(users),
       Folder.createIndexes(),
       Tag.createIndexes()
     ]);

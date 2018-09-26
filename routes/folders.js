@@ -39,7 +39,7 @@ router.get('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Folder.findOne({ id: _id, userId: userId })
+  Folder.findOne({ _id: id, userId: userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -107,7 +107,7 @@ router.put('/:id', (req, res, next) => {
 
   const updateFolder = { name, userId };
 
-  Folder.findByIdAndUpdate({ id: _id, userId: userId }, updateFolder, { new: true })
+  Folder.findByIdAndUpdate({ _id: id, userId: userId }, updateFolder, { new: true })
     .then(result => {
       if (result) {
         res.json(result);
@@ -140,7 +140,7 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Folder.findOneAndRemove({ id: _id, userId: userId }, {$unset: { name: '' }})
+  Folder.findOneAndRemove({ _id: id, userId: userId }, {$unset: { name: '' }})
     .then(() => {
       res.status(204).end();
     })

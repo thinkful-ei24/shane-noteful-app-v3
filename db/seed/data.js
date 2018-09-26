@@ -161,13 +161,15 @@ const users = [
     _id: '000000000000000000000001',
     fullname: 'Ms Green',
     username: 'msgreen',
-    password: '$2a$10$QJCIX42iD5QMxLRgHHBJre2rH6c6nI24UysmSYtkmeFv6X8uS1kgi'
+    password: '$2a$10$14KOyQIO0rzAA/Qs71B3Q.S/TV//scGY8SCVWmQJtxagHdv/qT/EK'
+
   },
   {
     _id: '000000000000000000000002',
     fullname: 'Mr Yellow',
     username: 'mryellow',
-    password: '$2a$10$QJCIX42iD5QMxLRgHHBJre2rH6c6nI24UysmSYtkmeFv6X8uS1kgi'
+    password: '$2a$10$/ZrhTuYYPmV/wWbdYENYne9J6RYAdi0J723aEj1zHDGjoZhFSOzVS'
+
   }
 ];
 
