@@ -79,10 +79,10 @@ router.post('/', ( req, res, next) => {
 
 
 
-  return User.hashPassword(password)
+  return User.hashPassword(password.trim())
     .then(digest => {
       const newUser = {
-        username,
+        username: username.trim(),
         password: digest,
         fullname: fullname.trim()
       };

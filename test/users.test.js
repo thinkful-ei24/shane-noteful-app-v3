@@ -86,9 +86,6 @@ describe.only('Noteful API - Users', function () {
       return chai.request(app).post('/api/users').send(testUser)
         .then(res => {
           expect(res).to.have.status(422);
-
-
-
         });
       });
 
@@ -97,9 +94,8 @@ describe.only('Noteful API - Users', function () {
       return chai.request(app).post('/api/users').send(testUser)
         .then(res => {
           expect(res).to.have.status(422);
-          // expect(res.body).to.be.an('object');
-          // expect(res.body).to.have.keys('id', 'username', 'fullname', 'password');
-          expect(res.body.username).to.not.be.a('string')
+          expect(res.body).to.be.an('object');
+          expect(res.body.username).to.not.be.a('string');
         });
       });
 
@@ -108,7 +104,8 @@ describe.only('Noteful API - Users', function () {
       return chai.request(app).post('/api/users').send(testUser)
         .then(res => {
           expect(res).to.have.status(422);
-          expect(res.body.password).to.not.be.a('string')
+          expect(res.body).to.be.an('object');
+          expect(res.body.password).to.not.be.a('string');
         });
       });
 
@@ -117,15 +114,16 @@ describe.only('Noteful API - Users', function () {
       return chai.request(app).post('/api/users').send(testUser)
         .then(res => {
           expect(res).to.have.status(422);
-
+          expect(res.body.message).to.eq('Cannot start or end with whitespace');
         });
       });
 
       it('Should reject users with non-trimmed password', function() {
-      const testUser = { password: password + ' ', fullname };
+      const testUser = { username, password: password + ' ', fullname };
       return chai.request(app).post('/api/users').send(testUser)
         .then(res => {
           expect(res).to.have.status(422);
+          expect(res.body.message).to.eq('Cannot start or end with whitespace');
         });
       });
 
@@ -138,7 +136,7 @@ describe.only('Noteful API - Users', function () {
       });
 
       it('Should reject users with password less than 8 characters', function() {
-      const testUser = { password: '12345', fullname };
+      const testUser = { username, password: '12345', fullname };
       return chai.request(app).post('/api/users').send(testUser)
         .then(res => {
           expect(res).to.have.status(422);
