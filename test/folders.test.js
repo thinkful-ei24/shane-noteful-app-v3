@@ -39,6 +39,7 @@ describe('Folderful API - Folders', function () {
       return Promise.all([
         Folder.find(),
         chai.request(app).get('/api/folders')
+          .set('Authorization', `Bearer ${token}`)
       ])
         .then(([data, res]) => {
           expect(res).to.have.status(200);

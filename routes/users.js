@@ -8,8 +8,8 @@ const User = require('../models/users');
 const router = express.Router();
 
 router.post('/', ( req, res, next) => {
-  const { username, password, fullName } = req.body;
-  const newUser = { username, password, fullName}
+  const { username, password, fullname } = req.body;
+  const newUser = { username, password, fullname};
 
 
   const requiredFields = ['username', 'password'];
@@ -21,7 +21,7 @@ router.post('/', ( req, res, next) => {
     return next(err);
   }
 
-  const stringField = ['username', 'password', 'firstName'];
+  const stringField = ['username', 'password', 'fullame'];
   const nonStringField = stringField.find( field => field in req.body && typeof req.body[field] !== 'string');
 
   if(nonStringField) {
@@ -84,7 +84,7 @@ router.post('/', ( req, res, next) => {
       const newUser = {
         username,
         password: digest,
-        fullName
+        fullname: fullname.trim()
       };
       return User.create(newUser);
     })
