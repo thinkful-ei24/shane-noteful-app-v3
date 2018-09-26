@@ -110,7 +110,7 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  const updateNote = { title, content, folderId, tags };
+  const updateNote = { title, content, folderId, tags, userId };
 
   Note.findOneAndUpdate({ userId: userId, _id: id }, updateNote, { new: true })
     .then(result => {

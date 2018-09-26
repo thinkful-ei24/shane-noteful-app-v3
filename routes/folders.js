@@ -11,8 +11,9 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 
 router.get('/', (req, res, next) => {
   const { searchTerm } = req.query;
+  const userId = req.user.id;
   console.log('1');
-  let filter = {};
+  let filter = { userId: userId };
 
   if (searchTerm) {
     filter.name = { $regex: searchTerm, $options: 'i' };
@@ -30,6 +31,7 @@ router.get('/', (req, res, next) => {
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
   const { id } = req.params;
+  const userId = req.user.id;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     const err = new Error('The `id` is not valid');
@@ -37,7 +39,7 @@ router.get('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Folder.findById(id)
+  Folder.findOne({ id: _id, userId: userId })
     .then(result => {
       if (result) {
         res.json(result);
@@ -55,6 +57,7 @@ router.get('/:id', (req, res, next) => {
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
   const { name } = req.body;
+  const userId = req.user.id;
 
   /***** Never trust users - validate input *****/
   if (!name) {
@@ -63,7 +66,7 @@ router.post('/', (req, res, next) => {
     return next(err);
   }
 
-  const newFolder = { name };
+  const newFolder = { name, userId };
 
   Folder.create(newFolder)
     .then(result => {
@@ -87,6 +90,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
+  const userId = req.user.id;
 
   /***** Never trust users - validate input *****/
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -101,9 +105,9 @@ router.put('/:id', (req, res, next) => {
     return next(err);
   }
 
-  const updateFolder = { name };
+  const updateFolder = { name, userId };
 
-  Folder.findByIdAndUpdate(id, updateFolder, { new: true })
+  Folder.findByIdAndUpdate({ id: _id, userId: userId }, updateFolder, { new: true })
     .then(result => {
       if (result) {
         res.json(result);
@@ -127,6 +131,7 @@ router.put('/:id', (req, res, next) => {
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
   const { id } = req.params;
+  const userId = req.user.id;
 
   /***** Never trust users - validate input *****/
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -135,7 +140,7 @@ router.delete('/:id', (req, res, next) => {
     return next(err);
   }
 
-  Folder.findByIdAndRemove(id, {$unset: { name: '' }})
+  Folder.findOneAndRemove({ id: _id, userId: userId }, {$unset: { name: '' }})
     .then(() => {
       res.status(204).end();
     })
