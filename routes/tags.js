@@ -10,6 +10,7 @@ router.use('/', passport.authenticate('jwt', { session: false, failWithError: tr
 // GET
 router.get('/', (req, res, next) => {
   const { searchTerm } = req.query;
+  const userId = req.user.id;
 
   let filter = { userId: userId };
 

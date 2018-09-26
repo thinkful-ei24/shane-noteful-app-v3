@@ -9,7 +9,7 @@ const { TEST_MONGODB_URI } = require('../config');
 
 const Folder = require('../models/folder.js');
 
-const { folders } = require('../db/seed/folders');
+const { folders } = require('../db/seed/data');
 
 const expect = chai.expect;
 chai.use(chaiHttp);
