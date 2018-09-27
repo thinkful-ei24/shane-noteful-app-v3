@@ -26,7 +26,7 @@ describe('Noteful API - Tags', function () {
   });
 
   afterEach(function () {
-    return mongoose.connection.db.dropDatabase();
+    Tag.removeMany(tags);
   });
 
   after(function () {

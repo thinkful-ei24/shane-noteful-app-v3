@@ -82,11 +82,11 @@ router.post('/', (req, res, next) => {
 
   if (!typeof tags === 'array'){
     tags.forEach(item => {
-      if (mongoose.Types.ObjectId.isValid(tagId) && !tagId.userId === userId) {
+      if (mongoose.Types.ObjectId.isValid(item) && item.userId === userId) {
         next();
       }
     });
-    const err = new Error('The `tagId` iis not valid');
+    const err = new Error('The `tagId` is not valid');
     err.status = 400;
     return next(err);
   }

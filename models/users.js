@@ -11,7 +11,6 @@ const schema = new mongoose.Schema({
 
 schema.set('toObject', {
   virtuals: true,     // include built-in virtual `id`
-  versionKey: false,  // remove `__v` version key
   transform: (doc, result) => {
     delete result._id;
     delete result.__v;

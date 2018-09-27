@@ -11,13 +11,13 @@ const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-describe.only('Noteful API - Users', function () {
+describe('Noteful API - Users', function () {
   const username = 'exampleUser';
   const password = 'examplePass';
   const fullname = 'Example Name';
 
   before(function () {
-    return mongoose.connect(TEST_MONGODB_URI)
+    return mongoose.connect(TEST_MONGODB_URI, { useNewUrlParser: true } )
       .then(() => mongoose.connection.db.dropDatabase());
   });
 
@@ -26,7 +26,7 @@ describe.only('Noteful API - Users', function () {
   });
 
   afterEach(function () {
-    return mongoose.connection.db.dropDatabase();
+    User.removeMany(users);
   });
 
   after(function () {
